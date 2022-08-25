@@ -1,39 +1,67 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# simple_text_form_field
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Plugin to create a simple text_form_field for iOS and Android, Windows, and Web. This package contains several custom widget, such as : 
+1. ```SimpleTextFormField```. for create simple textfield widget
+2. ```SimpleTextFormFieldDate```. for create simple date picker or time picker widget
+3. ```SimpleTextFormFieldDropDown```. for create generic dropdown widget
+<br><br>
+<img src="https://raw.githubusercontent.com/griajobag/list_timeline/main/timeline.png"/>
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+To use this plugin, add ```simple_text_form_field``` as
+a [dependency in your pubspec.yaml](https://flutter.io/platform-plugins/).
 
-```dart
-const like = 'sample';
+### Example
+
+```
+       SimpleTextFormField(
+              controller: controller,
+              isRequired: true,
+              errorTextSize: 8,
+              maxLength: 12,
+              label: "Name",
+              placeHolder: "Input your name",
+            ),
+            
+        SimpleTextFormFieldDate(
+          isRequired: true,
+          fillColor: Colors.transparent,
+          controller: controllerDate,
+          firstDate: DateTime.now(),
+          label: "Your Date",
+        ),
+        
+        SimpleTextFormFieldDate(
+          isRequired: true,
+          fillColor: Colors.transparent,
+          controller: controllerTime,
+          type: InputDatetimeType.time,
+          label: "Your Time",
+        ),
+        
+        SimpleTextFormFieldDropDown<ItemModel>(
+          controller: controllerDropdown,
+          required: true,
+          label: "Select one",
+          valueItem: (e)=> e.mainTitle!,
+          listItem: lists,
+        ),
 ```
 
-## Additional information
+and to to get value or do some validations just do like the following code :
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+```
+    if (controller.isValid &&
+          controllerDate.isValid &&
+          controllerTime.isValid &&
+      controllerDropdown.isValid) {
+        setState(() {
+          text = controller.value;
+          date = SimpleConstants.dateToString(controllerDate.value,
+              format: "dd/MM/yyyy");
+          time = controllerTime.value.format(context);
+        });
+      }
+```
+

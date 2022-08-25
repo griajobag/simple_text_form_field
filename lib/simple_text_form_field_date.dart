@@ -10,6 +10,8 @@ class SimpleTextFormFieldDateController {
   late BuildContext _context;
   late Function(VoidCallback fn) setState;
   FocusNode? focusNode = FocusNode();
+  DateTime? _firstDate;
+  DateTime? _lastDate ;
 
   DateTime? _date;
   TimeOfDay? _time;
@@ -70,8 +72,8 @@ class SimpleTextFormFieldDateController {
       final DateTime? picked = await showDatePicker(
         context: _context,
         initialDate: _date ?? DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime(3000),
+        firstDate: _firstDate!,
+        lastDate: _lastDate!,
       );
       if (picked != null && _date != picked) {
         setState(() {
@@ -142,6 +144,8 @@ class SimpleTextFormFieldDate extends StatefulWidget {
   final Color? fillColor;
   final double errorTextSize;
   final InputDecoration? customInputDecoration;
+  final DateTime ? firstDate;
+  final DateTime ? lastDate;
 
   const SimpleTextFormFieldDate(
       {Key? key,
@@ -163,6 +167,8 @@ class SimpleTextFormFieldDate extends StatefulWidget {
       this.fillColor,
       this.customInputDecoration,
       this.hintColor,
+        this.firstDate,
+        this.lastDate,
       this.errorTextSize = 10})
       : super(key: key);
 
@@ -183,6 +189,8 @@ class _SimpleTextFormFieldDateState extends State<SimpleTextFormFieldDate> {
     widget.controller!._required = widget.isRequired;
     widget.controller!._type = widget.type;
     widget.controller!._context = context;
+    widget.controller!._firstDate = widget.firstDate ?? DateTime(1900);
+    widget.controller!._lastDate = widget.lastDate ?? DateTime(3000);
 
     final decoration = InputDecoration(
       filled: true,

@@ -1,9 +1,9 @@
 class ItemModel{
-  String?title;
+  String?mainTitle;
   String?desc;
   DateTime? dateTime;
   ItemModel({
-    required this.title,
+    required this.mainTitle,
     required this.dateTime,
     required this.desc
 });

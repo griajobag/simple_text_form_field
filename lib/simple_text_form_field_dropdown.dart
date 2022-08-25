@@ -15,10 +15,13 @@ class SimpleTextFormFieldDropDownController<T> {
   }
 
   void _rootOnChanged(e) {
+    print("Masuk sini ${e.toString()}");
+  setState((){
     _value = e;
     if (onChanged != null) {
       onChanged!(e);
     }
+  });
 
   }
 
@@ -51,6 +54,7 @@ class SimpleTextFormFieldDropDown<T> extends StatefulWidget {
   final Radius? borderRadius;
   final List<T>listItem;
   final String Function(T) ?valueItem;
+  final String hintText;
 
   final SimpleTextFormFieldDropDownController controller;
   final Color ?fillColor;
@@ -62,6 +66,7 @@ class SimpleTextFormFieldDropDown<T> extends StatefulWidget {
     this.editable = true,
     this.fillColor,
     this.borderRadius,
+    this.hintText = "Select One",
     required this.listItem,
     required this.controller,
     this.valueItem,
@@ -86,6 +91,8 @@ class _SimpleTextFormFieldDropDownState<T> extends State<SimpleTextFormFieldDrop
   Widget build(BuildContext context) {
     final decoration = InputDecoration(
       filled: true,
+      hintText: widget.hintText,
+      hintStyle: const TextStyle(fontSize: 12),
       contentPadding: const EdgeInsets.only(top: 12, bottom: 12, left: 10, right: 10),
       fillColor: widget.fillColor ?? Colors.black.withOpacity(.01),
       isDense: true,
@@ -114,19 +121,19 @@ class _SimpleTextFormFieldDropDownState<T> extends State<SimpleTextFormFieldDrop
       children: widget.editable
           ? Form(
         key: widget.controller._key,
-        child: DropdownButtonFormField(
+        child: DropdownButtonFormField<T>(
           decoration: decoration,
           isExpanded: true,
           focusColor: Colors.transparent,
           validator: widget.controller._validator,
           value: widget.controller._value,
-          onChanged: widget.controller._rootOnChanged,
-          items: widget.listItem.isEmpty?[]: widget.listItem
-              .map((e) => DropdownMenuItem(
+          items: widget.listItem
+              .map((e) => DropdownMenuItem<T>(
             value: e,
             child: TextComponent(text:widget.valueItem!(e)),
           ))
               .toList(),
+          onChanged: widget.controller._rootOnChanged,
           style: TextStyle(
             color: Colors.black.withOpacity(.7),
             fontSize:12,
