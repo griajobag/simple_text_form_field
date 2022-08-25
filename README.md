@@ -5,7 +5,14 @@ Plugin to create a simple text_form_field for iOS and Android, Windows, and Web.
 2. ```SimpleTextFormFieldDate```. for create simple date picker or time picker widget
 3. ```SimpleTextFormFieldDropDown```. for create generic dropdown widget
 <br><br>
-<img src="https://raw.githubusercontent.com/griajobag/list_timeline/main/timeline.png"/>
+<div align="center">
+<img src="https://raw.githubusercontent.com/griajobag/simple_text_form_field/main/web.png"/>
+       <br>
+<img src="https://raw.githubusercontent.com/griajobag/simple_text_form_field/main/windows.png"/>
+       <br>
+<img src="https://raw.githubusercontent.com/griajobag/simple_text_form_field/main/mobile.png"/>
+</div>
+
 
 ## Usage
 
