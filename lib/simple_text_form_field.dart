@@ -31,6 +31,7 @@ class SimpleTextFormFieldController extends ChangeNotifier {
   FormFieldSetter<String>? onSaved;
   FocusNode focusNode = FocusNode();
   BuildContext? _context;
+  int? _numberOfPhoneNumberLength;
 
   String? _validator(String v, {FormFieldValidator<String>? otherValidator}) {
     if (_required && (v.isEmpty)) {
@@ -45,12 +46,8 @@ class SimpleTextFormFieldController extends ChangeNotifier {
       }
     }
     if (_type == InputTextType.phone) {
-      if (v.length < 8) {
-        return 'Minimal 8 digit';
-      }
-      ;
-      if (v[0] == "0") {
-        return 'Nomor tidak bisa diawali dengan angka 0';
+      if (v.length < _numberOfPhoneNumberLength! && v.isNotEmpty) {
+        return 'Minimal ${_numberOfPhoneNumberLength!.toString()} digit';
       }
     }
 
@@ -146,30 +143,34 @@ class SimpleTextFormField extends StatefulWidget {
   final Color? hintColor;
   final Color? fillColor;
   final double errorTextSize;
+  final int maxDigitPhoneNumber;
+  final InputDecoration? customInputDecoration;
 
-  const SimpleTextFormField({
-    Key? key,
-    @required this.controller,
-    this.isRequired = false,
-    this.label,
-    this.editable = true,
-    this.type = InputTextType.text,
-    this.placeHolder,
-    this.marginBottom,
-    this.inputFormatters,
-    this.validator,
-    this.onEditingComplete,
-    this.maxLength,
-    this.prefixText,
-    this.borderRadius,
-    this.fontsize = 12,
-    this.onFieldSubmited,
-    this.edgeInsets = const EdgeInsets.all(0),
-    this.visibility = true,
-    this.fillColor,
-    this.hintColor,
-    this.errorTextSize = 10
-  }) : super(key: key);
+  const SimpleTextFormField(
+      {Key? key,
+      @required this.controller,
+      this.isRequired = false,
+      this.label,
+      this.editable = true,
+      this.type = InputTextType.text,
+      this.placeHolder,
+      this.marginBottom,
+      this.inputFormatters,
+      this.validator,
+      this.onEditingComplete,
+      this.maxLength,
+      this.prefixText,
+      this.maxDigitPhoneNumber = 12,
+      this.borderRadius,
+      this.fontsize = 12,
+      this.onFieldSubmited,
+      this.edgeInsets = const EdgeInsets.all(0),
+      this.visibility = true,
+      this.fillColor,
+      this.customInputDecoration,
+      this.hintColor,
+      this.errorTextSize = 10})
+      : super(key: key);
 
   @override
   _SimpleTextFormFieldState createState() => _SimpleTextFormFieldState();
@@ -187,12 +188,12 @@ class _SimpleTextFormFieldState extends State<SimpleTextFormField> {
     widget.controller!._required = widget.isRequired;
     widget.controller!._type = widget.type;
     widget.controller!._context = context;
+    widget.controller!._numberOfPhoneNumberLength = widget.maxDigitPhoneNumber;
 
     final decoration = InputDecoration(
       filled: true,
-      fillColor: widget.fillColor == null
-          ? Colors.white
-          : Colors.black.withOpacity(widget.editable ? .01 : .05),
+      fillColor: widget.fillColor ??
+          Colors.black.withOpacity(widget.editable ? .01 : .05),
       hintText: widget.placeHolder,
       errorStyle: TextStyle(fontSize: widget.errorTextSize, height: 0.3),
       isDense: true,
@@ -234,13 +235,15 @@ class _SimpleTextFormFieldState extends State<SimpleTextFormField> {
 
     var textFormField = TextFormField(
       maxLines: widget.type == InputTextType.paragraf ? 4 : 1,
-      maxLength: widget.maxLength == null ? null : widget.maxLength,
+      maxLength: ((widget.type == InputTextType.phone) ||
+              (widget.type == InputTextType.ktp))
+          ? widget.maxLength
+          : null,
       onChanged: widget.controller!.onChanged,
       onSaved: widget.controller!.onSaved,
       onTap: widget.controller!.onTap,
       focusNode: widget.controller!.focusNode,
-      onFieldSubmitted:
-          widget.onFieldSubmited == null ? null : widget.onFieldSubmited,
+      onFieldSubmitted: widget.onFieldSubmited,
       style: TextStyle(
         color: Colors.black,
         fontSize: widget.fontsize,
@@ -268,7 +271,7 @@ class _SimpleTextFormFieldState extends State<SimpleTextFormField> {
               widget.type == InputTextType.money)
           ? TextInputType.number
           : null,
-      decoration: decoration,
+      decoration: widget.customInputDecoration ?? decoration,
     );
 
     return Visibility(
@@ -283,8 +286,8 @@ class _SimpleTextFormFieldState extends State<SimpleTextFormField> {
             key: widget.controller!._key,
             child: widget.type == InputTextType.money
                 ? Focus(
-                    child: textFormField,
                     onFocusChange: widget.controller!._onFocusChange,
+                    child: textFormField,
                   )
                 : textFormField,
           ),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SimpleConstants{
@@ -11,4 +12,14 @@ class SimpleConstants{
     var val = oCcy.format(value ?? 0);
     return val == "0" && zeroIsEmpty ? "" : val;
   }
+
+  static String? dateToString(DateTime? date,
+      {String format = 'yyyy-MM-dd HH:mm', bool returnNull = false}) {
+    if (date == null) return returnNull ? null : "";
+    final DateFormat formatter = DateFormat(format);
+    final String formatted = formatter.format(date);
+    return formatted;
+  }
+
+
 }
