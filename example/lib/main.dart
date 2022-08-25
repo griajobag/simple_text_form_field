@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:example/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_text_form_field/simple_contants.dart';
 import 'package:simple_text_form_field/simple_text_form_field.dart';
 import 'package:simple_text_form_field/simple_text_form_field_date.dart';
+import 'package:simple_text_form_field/simple_text_form_field_dropdown.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,10 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
       SimpleTextFormFieldDateController();
   SimpleTextFormFieldDateController controllerTime =
       SimpleTextFormFieldDateController();
+  SimpleTextFormFieldDropDownController<ItemModel> controllerDropdown =
+      SimpleTextFormFieldDropDownController();
 
-  String ?text="";
-  String ?date="";
-  String ?time="";
+  String? text = "";
+  String? date = "";
+  String? time = "";
+  String? objectSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -63,14 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
               label: "Name",
               placeHolder: "Input your name",
             ),
-            const Padding(padding:  EdgeInsets.all(10)),
+            const Padding(padding: EdgeInsets.all(10)),
             SimpleTextFormFieldDate(
               isRequired: true,
               fillColor: Colors.transparent,
               controller: controllerDate,
               label: "Your birthday",
             ),
-            const Padding(padding:  EdgeInsets.all(10)),
+            const Padding(padding: EdgeInsets.all(10)),
             SimpleTextFormFieldDate(
               isRequired: true,
               fillColor: Colors.transparent,
@@ -78,15 +83,39 @@ class _MyHomePageState extends State<MyHomePage> {
               type: InputDatetimeType.time,
               label: "Your Time",
             ),
+            const Padding(padding: EdgeInsets.all(10)),
+            SimpleTextFormFieldDropDown<ItemModel>(
+              controller: controllerDropdown,
+              required: true,
+              valueItem: (e)=> e.title!,
+              listItem: [
+                ItemModel(
+                    title: "First Title",
+                    dateTime: DateTime.now(),
+                    desc: "This is the first description of title"),
+                ItemModel(
+                    title: "Second Title",
+                    dateTime: DateTime.now(),
+                    desc: "This is the first description of title"),
+                ItemModel(
+                    title: "Third Title",
+                    dateTime: DateTime.now(),
+                    desc: "This is the first description of title"),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
                   //to validate you just need do like this
-                  if (controller.isValid && controllerDate.isValid && controllerTime.isValid) {
+                  if (controller.isValid &&
+                      controllerDate.isValid &&
+                      controllerTime.isValid &&
+                  controllerDropdown.isValid) {
                     setState(() {
                       text = controller.value;
-                      date = SimpleConstants.dateToString(controllerDate.value,format: "dd/MM/yyyy");
+                      date = SimpleConstants.dateToString(controllerDate.value,
+                          format: "dd/MM/yyyy");
                       time = controllerTime.value.format(context);
                     });
                   }
@@ -102,8 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Text(
-                  "Text :${text!}, Date : ${date!}, Time : ${time!}"),
+              child: Text("Text :${text!}, Date : ${date!}, Time : ${time!}"),
             )
           ],
         ),

@@ -14,6 +14,7 @@ class InputBoxComponent extends StatelessWidget {
   final bool isRequired;
   final bool? editable;
   final Function()? clearOnTab;
+  final double heightOfSizebox;
 
   const InputBoxComponent({
     Key? key,
@@ -23,6 +24,7 @@ class InputBoxComponent extends StatelessWidget {
     this.onTap,
     this.children,
     this.childrenSizeBox,
+    this.heightOfSizebox = 48,
     this.allowClear = false,
     this.clearOnTab,
     this.errorMessage,
@@ -69,7 +71,7 @@ class InputBoxComponent extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 48,
+                height: heightOfSizebox,
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
